@@ -3,7 +3,7 @@
             [ring.middleware.json :refer :all]
             [ring.middleware.defaults :refer :all]
             [ring.util.response :refer [response ]]
-            [playground.taxis :refer [get-taxis update-taxi get-taxi-detail]]
+            [playground.taxis :refer [get-taxis update-taxi! get-taxi-detail]]
             [gocatch.subsystems.utils :refer [ignore-errors]]))
 
 (defn debug-handler [req]
@@ -44,17 +44,16 @@
 
 (defn update-taxi-handler [taxi-name {:keys [lat lng]}]
   ;; put some clojure.spec magic in here
-
   (if (and lat lng)
-    (if-let [new-taxi (update-taxi taxi-name lat lng)]
+    (if-let [new-taxi (update-taxi! taxi-name lat lng)]
       (response {:taxi new-taxi})
       {:status 404
        :body "Taxi not found.\n"})
     {:status 400
      :body "Invalid location.\n"}))
+
 (defn get-taxi-detail-handler [taxi-name]
   (let [taxi (get-taxi-detail taxi-name)]
-    (println taxi)
     (if taxi
       (response {:taxi taxi})
       {:status 404
