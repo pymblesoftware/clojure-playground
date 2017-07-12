@@ -4,6 +4,7 @@
             [ring.middleware.defaults :refer :all]
             [ring.util.response :refer [response ]]
             [playground.taxis :refer [get-taxis update-taxi! get-taxi-detail]]
+            [playground.passenger :refer :all]
             [gocatch.subsystems.utils :refer [ignore-errors]]))
 
 (defn debug-handler [req]
@@ -59,12 +60,17 @@
       {:status 404
        :body "Taxi not found.\n"})))
 
+(defn post-job [p-name lat lon]
+  (new-passenger! p-name lat lon)
+  )
+
 (defroutes raw-routes
   (ANY  "/debug" [] (wrap-defaults debug-handler (dissoc site-defaults :security)))
   (ANY  "/" [foo] (foo-handler foo))
   (GET "/taxis" [lat lng] (get-taxis-handler lat lng))
   (PUT "/taxis/:t-name" [t-name location] (update-taxi-handler t-name location))
-  (GET "/taxis/:t-name" [t-name ] (get-taxi-detail-handler t-name)))
+  (GET "/taxis/:t-name" [t-name ] (get-taxi-detail-handler t-name))
+  (POST "/jobs" [name lat lng]  (post-job name lat lng) ))
 
 
 (def example-routes
