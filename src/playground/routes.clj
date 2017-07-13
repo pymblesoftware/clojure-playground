@@ -43,6 +43,24 @@
       {:status 400
        :body "Invalid lat/lng supplied"})))
 
+
+;;      response should be:
+;;      200 OK "" if nothing to do
+;;      200 ok {:jobs-available [{:passenger "bob" :lat 1 :lng 2]}
+;;      TODO: Complete this funciton.
+(defn get-jobs-avail  []
+  [{:passenger "bob" :lat 1 :lng 2  }]
+  )
+
+(defn get-taxis-handler2 [lat lng]
+  ;(let [lat (safe-parse-float lat)
+  ;      lng (safe-parse-float lng)]
+    (if (and lat lng)
+      (response {:jobs-available (get-jobs-avail)})
+      {:status 400
+       :body "Invalid lat/lng supplied"}))                  ; )
+
+
 (defn update-taxi-handler [taxi-name {:keys [lat lng]}]
   ;; put some clojure.spec magic in here
   (if (and lat lng)
@@ -70,7 +88,8 @@
   (GET "/taxis" [lat lng] (get-taxis-handler lat lng))
   (PUT "/taxis/:t-name" [t-name location] (update-taxi-handler t-name location))
   (GET "/taxis/:t-name" [t-name ] (get-taxi-detail-handler t-name))
-  (POST "/jobs" [name lat lng]  (post-job name lat lng) ))
+  (POST "/jobs" [name lat lng]  (post-job name lat lng) )
+  (ANY "/taxis2" [lat lng]  (get-taxis-handler2 lat lng)) )
 
 
 (def example-routes
@@ -88,3 +107,6 @@
 ;;   passenger posts a new job:
 ;;   POST /job/
 ;;      params of the post {:passegner -name  current location}
+
+
+
