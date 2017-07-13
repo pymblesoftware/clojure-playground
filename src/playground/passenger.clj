@@ -38,9 +38,17 @@
 (defn match-passenger-taxi [pass]
   (do
     (println (str "examining:" (deref pass)  ) )
-    ()
+    (if
+      (= (( deref pass  ) :name) "Bob")
+        (do (println "found")
+            pass )                                                 ; Want this one.
+          nil)                                                     ; else nil.
+        )
     )
-  )
+
+
+
+
 
 (defn strategy []
   (doseq [[k v] (deref playground.passenger/passengers)]
