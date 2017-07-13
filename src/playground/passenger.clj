@@ -22,3 +22,22 @@
   )
 
 
+;(defn get-jobs-avail  []
+;  [{:passenger "bob" :lat 1 :lng 2  }] )
+
+(defn format-passenger [name]
+  "Format output with the name of the passenger that was found for the job"
+  {
+   :passenger (   (deref  (get (deref playground.passenger/passengers) name  )  )  :name  )
+   :lat ( (deref  (get (deref playground.passenger/passengers) name  )  )  :lat  )
+   :lng ( (deref  (get (deref playground.passenger/passengers) name  )  )  :lng  )
+   }
+  )
+
+(defn find-passenger-for-job [lat lng]
+    "Bill"
+  )
+
+
+(defn get-jobs-avail-internal  [lat lng]
+  (format-passenger (find-passenger-for-job lat lng)))
