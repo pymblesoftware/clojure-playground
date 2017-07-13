@@ -22,9 +22,6 @@
   )
 
 
-;(defn get-jobs-avail  []
-;  [{:passenger "bob" :lat 1 :lng 2  }] )
-
 (defn format-passenger [name]
   "Format output with the name of the passenger that was found for the job"
   {
@@ -32,6 +29,23 @@
    :lat ( (deref  (get (deref playground.passenger/passengers) name  )  )  :lat  )
    :lng ( (deref  (get (deref playground.passenger/passengers) name  )  )  :lng  )
    }
+  )
+
+;;
+;;
+;;
+
+(defn match-passenger-taxi [pass]
+  (do
+    (println (str "examining:" (deref pass)  ) )
+    ()
+    )
+  )
+
+(defn strategy []
+  (doseq [[k v] (deref playground.passenger/passengers)]
+    ;(prn k v))
+    (match-passenger-taxi v))
   )
 
 ;; TODO: --- finish this function to find taxis near passengers.
