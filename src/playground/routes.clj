@@ -48,15 +48,16 @@
 ;;      200 OK "" if nothing to do
 ;;      200 ok {:jobs-available [{:passenger "bob" :lat 1 :lng 2]}
 ;;      TODO: Complete this funciton.
-(defn get-jobs-avail  []
-  [{:passenger "bob" :lat 1 :lng 2  }]
+(defn get-jobs-avail  [lat lng]
+  ;[{:passenger "bob" :lat 1 :lng 2  }]
+  (get-jobs-avail-internal lat lng)
   )
 
 (defn get-taxis-handler2 [lat lng]
   ;(let [lat (safe-parse-float lat)
   ;      lng (safe-parse-float lng)]
     (if (and lat lng)
-      (response {:jobs-available (get-jobs-avail)})
+      (response {:jobs-available (get-jobs-avail lat lng)})
       {:status 400
        :body "Invalid lat/lng supplied"}))                  ; )
 

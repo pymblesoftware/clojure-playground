@@ -34,9 +34,10 @@
    }
   )
 
+;; TODO: --- finish this function to find taxis near passengers.
+
 (defn find-passenger-for-job [lat lng]
-    "Bill"
-  )
+    "Bill"  )
 
 
 (defn get-jobs-avail-internal  [lat lng]
