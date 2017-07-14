@@ -36,7 +36,7 @@
 ;;
 
 (defn match-passenger-taxi [pass]
-  (do
+  ;(do
     (println (str "examining:" (deref pass)  ) )
     (if
       (= (( deref pass  ) :name) "Bob")
@@ -44,7 +44,7 @@
             pass )                                                    ; Want this one.
           nil)                                                     ; else nil.
         )
-    )
+    ;)
 
 
 
@@ -66,9 +66,21 @@
 ;(defn strategy3 [lat lng]
 ;  (   (deref playground.passenger/passengers)))
 
-(defn strategy4 [lat lng]
-  (first (deref playground.passenger/passengers) )
+(defn new-matcher [pass]
+  (println (str "new-matcher pass:" pass) )
+  pass
   )
+
+(defn strategy5 [lat lng]
+  ;(println (str ":" ))
+  ;(filter new-matcher (deref passengers))
+  (let temp [(deref passengers)]  )
+  (filter match-passenger-taxi (deref passengers))
+
+  )
+
+(defn strategy4 [lat lng]
+  (first (deref playground.passenger/passengers)))
 
 (defn find-passenger-for-job [lat lng]
   (first (strategy4 lat lng) ))
