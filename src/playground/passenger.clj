@@ -41,25 +41,37 @@
     (if
       (= (( deref pass  ) :name) "Bob")
         (do (println "found")
-            pass )                                                 ; Want this one.
+            pass )                                                    ; Want this one.
           nil)                                                     ; else nil.
         )
     )
 
 
 
+;(defn strategy [lat lng]
+;  (for [[k v] (deref playground.passenger/passengers)]
+;    ;(prn k v))
+;    (:when (not= nil (match-passenger-taxi v)) v)  v))
 
-
-(defn strategy []
+(defn strategy [lat lng]
   (doseq [[k v] (deref playground.passenger/passengers)]
     ;(prn k v))
-    (match-passenger-taxi v))
+   (:when (not= nil (match-passenger-taxi v)) v)  v))
+
+;(defn strategy2 [lat lng]
+;   (for ([k v] (deref playground.passenger/passengers)) (match-passenger-taxi v)))
+
+;; TODO: --- finish this function to find passengers near taxis.
+
+;(defn strategy3 [lat lng]
+;  (   (deref playground.passenger/passengers)))
+
+(defn strategy4 [lat lng]
+  (first (deref playground.passenger/passengers) )
   )
 
-;; TODO: --- finish this function to find taxis near passengers.
-
 (defn find-passenger-for-job [lat lng]
-    "Bill"  )
+  (first (strategy4 lat lng) ))
 
 
 (defn get-jobs-avail-internal  [lat lng]
