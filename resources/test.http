@@ -1,0 +1,37 @@
+#-*- mode: restclient -*-
+
+:host = http://localhost:4348
+
+# get taxis near a location
+GET :host/taxis?lat=10&lng=10
+Content-Type: application/json
+
+# update location
+PUT :host/taxis/A
+Content-Type: application/json
+{
+  "location": {
+      "lat": 10,
+      "lng": 12
+  }
+}
+
+# get a taxi detail
+GET :host/taxis/A
+
+
+# POST a job
+POST :host/jobs
+Content-Type: application/json
+{
+  "passenger": "Peter2",
+  "lat": 10,
+  "lng": 12
+}
+
+
+:test-job-id=ab54617d-39c3-4003-bd66-9a4e2e394d85
+# GET on  job
+GET :host/jobs/:test-job-id
+
+
