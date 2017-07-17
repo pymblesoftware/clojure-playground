@@ -3,10 +3,12 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.8.0"] 
+  :dependencies [[org.clojure/clojure "1.8.0"]
+                 [org.clojure/core.async "0.3.443"]
                  [com.gocatch/subsystems "2.8.7"]
                  [clojure-future-spec "1.9.0-alpha11"]
-                 [org.clojure/test.check "0.9.0"]]
+                 [org.clojure/test.check "0.9.0"]
+                 ]
   :repositories [["releases" 
                   {:url "https://nexus.gocatchapp.com/artifactory/engineering-releases/"
                    :sign-releases false}]
@@ -17,3 +19,4 @@
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}}
 )
+
