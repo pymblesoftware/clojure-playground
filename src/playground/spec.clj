@@ -1,5 +1,6 @@
 (ns playground.spec
-  (:require [clojure.spec :as s]))
+  (:require [clojure.spec :as s]
+            [clojure.spec.gen]))
 
 
 (s/def ::lat (s/and number? #(>= % -90) #(<= % 90)))
@@ -10,8 +11,8 @@
 
 (s/def ::job (s/keys :req-un [::passenger ::location]))
 
+
 (defn valid-passenger? [passenger]
-  (print passenger)
   (s/valid? ::passenger passenger))
 
 (defn valid-location? [location]

@@ -39,7 +39,6 @@
 
 (def taxis (atom {"A" (make-taxi "A")
                   "B" (make-taxi "B")}))
-(do @taxis)
 
 (defn get-taxi [name]
   (@taxis name))
@@ -56,17 +55,35 @@
                            taxis)]
       selected)))
 
-b;; (defn- get-nearest-taxi-wrapper [taxis]
-;;   (fn [lat lng]
-;;     (let [taxis (map deref (vals @taxis)) 
-;;           distance-to (partial distance-between [lat lng])
-;;           distance-list (map #(assoc % :distance (distance-to [(% :lat) (% :lng)])) taxis)]
-;;       (first (sort #(compare (%1 :distance) (%2 :distance)) distance-list)))))
+(defn get-available-jobs [taxi jobs]
+  (let [all-jobs (vals @jobs)
+        {t-lat :lat t-lng :lng} @taxi
+        x (reduce (fn [available-jobs job]
+                    (let [distance (distance-between [t-lat t-lng] [(@job :lat) (@job :lng)])]
+                      (if (>= max-distance distance)
+                        (into available-jobs [@job])
+                        available-jobs)))
+                  []
+                  all-jobs)]
+    x))
 
-;; (def
-;;   ^{:arglists [lat lng]
-;;     :doc "Get the nearest taxi "}
-;;   get-nearest-taxi (get-nearest-taxi-wrapper taxis))
+
+
+
+(defn- get-location [obj]
+  [(:lat @obj) (:lng @obj)])
+
+(defn- jobs-within-range? [loc job]
+  (>= max-distance (distance-between loc (get-location job))))
+
+(defn get-available-jobs [taxi jobs]
+  ;; FIXME: 2) ask dispatcher for any available jobs for this taxi
+  (filter (partial jobs-within-range? (get-location taxi))
+          (vals jobs)))
+
+;; FIXME: 3)
+;; write dispatcher codeb.
+
 
 (def
   ^{:arglists '([lat lng distance])}
@@ -86,21 +103,14 @@ b;; (defn- get-nearest-taxi-wrapper [taxis]
     (if (and lat lng)
       (response {:taxis (map deref (get-taxis lat lng max-distance))}))))
 
-(defn same-location? [old-lat old-lng new-lat new-lng]
-  (and (= old-lat new-lat) (= old-lng new-lng)))
-
 (defn update-taxi-handler [taxi-name {:keys [lat lng]}]
   (when-not (and (valid-lat? lat) (valid-lng? lng))
     (bad-request "Invalid lat/lng supplied.\n"))
   (if-let [taxi (get-taxi taxi-name)]
     (do
       (update-taxi! taxi lat lng)
-      (let [available-jobs (get-available-jobs taxi jobs)]
-        (if (empty? available-jobs)
-          (response "OK")
-          (response {:job-available jobs}))))
-    (not-found "Taxi not found.\n"))
-  )
+      (response {:job-available (map deref (get-available-jobs taxi @jobs))}))
+    (not-found "Taxi not found.\n")))
 
 (defn get-taxi-detail-handler [taxi-name]
   (if-let [taxi (get-taxi-detail taxi-name)]
@@ -111,25 +121,3 @@ b;; (defn- get-nearest-taxi-wrapper [taxis]
   (GET "/" [lat lng] (get-taxis-handler lat lng))
   (PUT "/:t-name" [t-name location] (update-taxi-handler t-name location))
   (GET "/:t-name" [t-name ] (get-taxi-detail-handler t-name)))
-
-;;;; test
-(def a-taxi (make-taxi "A"))
-
-(defn taxi-location-watcher [key atom old-state new-state]
-  ;; get available jobs near the new location
-  )
-
-(defn get-available-jobs [taxi jobs]
-  (let [all-jobs (vals @jobs)
-        {t-lat :lat t-lng :lng} @taxi
-        x (reduce (fn [available-jobs job]
-                     (let [distance (distance-between [t-lat t-lng] [(@job :lat) (@job :lng)])]
-                       (print distance max-distance)
-                       (if (>= max-distance distance)
-                         (do
-                           (print (@job :name) distance)
-                           (into available-jobs [@job]))
-                         available-jobs)))
-                   []
-                   all-jobs)]
-    x))
