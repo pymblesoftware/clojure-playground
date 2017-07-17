@@ -66,6 +66,12 @@
 ;(defn strategy3 [lat lng]
 ;  (   (deref playground.passenger/passengers)))
 
+
+
+
+(defn crash-me []
+  (let [temp  (deref passengers)]   (println temp)   ))
+
 (defn new-matcher [pass]
   (println (str "new-matcher pass:" pass) )
   pass
@@ -74,7 +80,7 @@
 (defn strategy5 [lat lng]
   ;(println (str ":" ))
   ;(filter new-matcher (deref passengers))
-  (let temp [(deref passengers)]  )
+  (let [temp (deref passengers)]  )
   (filter match-passenger-taxi (deref passengers))
 
   )
